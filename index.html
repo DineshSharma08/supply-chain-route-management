@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupplyFlow | Route Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="#">
+            <span class="brand-icon">SF</span>
+            <span><b>SupplyFlow</b><small>Supply Chain Management</small></span>
+        </a>
+        <span class="online"><i></i> System Ready</span>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div>
+                <span class="eyebrow">SMART LOGISTICS DASHBOARD</span>
+                <h1>Move goods.<br><span>Move smarter.</span></h1>
+                <p>Manage your routes, warehouse locations and deliveries from one place.</p>
+                <button class="btn btn-white" onclick="document.getElementById('deliveries').scrollIntoView({behavior:'smooth'})">
+                    Manage Deliveries ↓
+                </button>
+            </div>
+            <div class="hero-art">
+                <div class="orbit"></div>
+                <div class="truck">🚚</div>
+                <div class="floating-box box-one">📦</div>
+                <div class="floating-box box-two">📍</div>
+                <div class="floating-box box-three">🧭</div>
+            </div>
+        </section>
+
+        <section class="warehouse">
+            <div class="warehouse-icon">🏭</div>
+            <div class="warehouse-info">
+                <span class="eyebrow">CENTRAL DISPATCH POINT</span>
+                <h2>Delhi Main Warehouse <span class="main-tag">MAIN WAREHOUSE</span></h2>
+                <p>Default starting point for outgoing deliveries. Protected from accidental deletion.</p>
+            </div>
+            <span class="active-tag">● Active</span>
+        </section>
+
+        <section class="stats">
+            <div class="stat blue">
+                <div class="stat-label">Total Locations <span>📍</span></div>
+                <h2 id="locationCount">0</h2>
+                <small>Including Delhi warehouse</small>
+            </div>
+            <div class="stat purple">
+                <div class="stat-label">Total Routes <span>🛣️</span></div>
+                <h2 id="routeCount">0</h2>
+                <small>Available connections</small>
+            </div>
+            <div class="stat orange">
+                <div class="stat-label">Pending Deliveries <span>📦</span></div>
+                <h2 id="deliveryCount">0</h2>
+                <small>Waiting in queue</small>
+            </div>
+            <div class="stat green">
+                <div class="stat-label">Completed <span>✓</span></div>
+                <h2 id="completedCount">0</h2>
+                <small>Processed deliveries</small>
+            </div>
+        </section>
+
+        <section class="grid">
+            <article class="panel" id="routesSection">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow dark">ROUTE NETWORK</span>
+                        <h2>Available Routes</h2>
+                        <p>View, manage or delete existing route connections.</p>
+                    </div>
+                    <button class="btn btn-primary" id="toggleRoutesBtn" type="button">View All Routes ↓</button>
+                </div>
+                <div id="routesArea" class="hidden">
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr><th>Route</th><th>Distance</th><th>Action</th></tr>
+                            </thead>
+                            <tbody id="routeList"></tbody>
+                        </table>
+                    </div>
+                    <p id="emptyRoutes" class="empty hidden">No routes available. Add a route below.</p>
+                </div>
+                <div class="tip">
+                    <span>💡</span>
+                    <div><b>Smart routing tip</b><p>Connect locations with distances to calculate the shortest path between them.</p></div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow dark">ROUTE OPTIMIZATION</span>
+                        <h2>Shortest Route Finder</h2>
+                        <p>Calculate the shortest connected path.</p>
+                    </div>
+                    <span class="feature-icon">✦</span>
+                </div>
+                <form id="shortestPathForm" class="form">
+                    <label for="sourceLocation">Starting Location</label>
+                    <select id="sourceLocation" required></select>
+                    <label for="destinationLocation">Destination</label>
+                    <select id="destinationLocation" required></select>
+                    <button class="btn btn-gradient full" type="submit">Find Shortest Route →</button>
+                </form>
+                <div id="shortestResult" class="result hidden" aria-live="polite"></div>
+            </article>
+        </section>
+
+        <section class="grid">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow dark">LOCATION MANAGEMENT</span>
+                        <h2>Manage Locations</h2>
+                        <p>Add locations and remove unused ones.</p>
+                    </div>
+                    <span class="feature-icon blue-icon">📍</span>
+                </div>
+                <form id="locationForm" class="inline-form">
+                    <input id="locationName" type="text" maxlength="60" placeholder="Enter location name" required>
+                    <button class="btn btn-primary" type="submit">+ Add</button>
+                </form>
+                <div class="list-heading"><b>Saved Locations</b><span id="locationListLabel">0 locations</span></div>
+                <div id="locationList" class="managed-list"></div>
+                <p class="note">🔒 Delhi is protected. Delete connected routes before deleting another location.</p>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow dark">NETWORK MANAGEMENT</span>
+                        <h2>Manage Routes</h2>
+                        <p>Create new links between locations.</p>
+                    </div>
+                    <span class="feature-icon purple-icon">↗</span>
+                </div>
+                <form id="routeForm" class="form">
+                    <div class="two-columns">
+                        <div><label for="routeFrom">From</label><select id="routeFrom" required></select></div>
+                        <div><label for="routeTo">To</label><select id="routeTo" required></select></div>
+                    </div>
+                    <label for="routeDistance">Distance (km)</label>
+                    <input id="routeDistance" type="number" min="0.1" step="0.1" placeholder="Enter distance" required>
+                    <button class="btn btn-primary full" type="submit">+ Add Route</button>
+                </form>
+                <div class="tip purple-tip"><span>↔</span><div><b>Two-way routes</b><p>Each route can be travelled in either direction for shortest-path calculations.</p></div></div>
+            </article>
+        </section>
+
+        <section class="panel delivery-panel" id="deliveries">
+            <div class="panel-heading">
+                <div>
+                    <span class="eyebrow dark">DISPATCH CENTER</span>
+                    <h2>Delivery Management</h2>
+                    <p>Add deliveries and process them in first-in, first-out (FIFO) order.</p>
+                </div>
+                <span class="feature-icon orange-icon">📦</span>
+            </div>
+
+            <form id="deliveryForm" class="delivery-form">
+                <div class="grow">
+                    <label for="deliveryName">Delivery / Item Name</label>
+                    <input id="deliveryName" type="text" maxlength="80" placeholder="e.g. Electronics Package" required>
+                </div>
+                <div class="grow">
+                    <label for="deliveryDestination">Destination</label>
+                    <select id="deliveryDestination" required></select>
+                </div>
+                <button class="btn btn-primary" type="submit">+ Add Delivery</button>
+            </form>
+
+            <div class="delivery-grid">
+                <div>
+                    <div class="list-heading"><b>🟠 Pending Queue</b><span id="pendingLabel">0 pending</span></div>
+                    <div id="deliveryList" class="delivery-list"></div>
+                    <button class="btn btn-gradient full process-btn" id="processDeliveryBtn" type="button">Process Next Delivery →</button>
+                </div>
+                <div>
+                    <div class="list-heading"><b>🟢 Completed History</b><span id="completedLabel">0 completed</span></div>
+                    <div id="completedDeliveryList" class="delivery-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <div id="statusMessage" class="toast hidden" role="status"></div>
+    </main>
+
+    <footer>
+        <span><b>SupplyFlow</b> · Supply Chain Route Management System</span>
+        <span>Built for smarter logistics ✦</span>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

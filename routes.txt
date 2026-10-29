@@ -1,0 +1,6 @@
+Delhi|Mumbai|540.00
+Delhi|Jaipur|240.00
+Mumbai|Jaipur|400.00
+Mumbai|Jammu|820.00
+Jaipur|Jammu|330.00
+Agra|Mumbai|600.00
